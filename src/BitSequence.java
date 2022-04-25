@@ -8,14 +8,13 @@ import java.util.NoSuchElementException;
  * data structure is a dynamic array of primitive bytes. This collection
  * supports append operations and bit-level modification, but it does not
  * support removal.
- * 
+ *
  * <p>This class is intended to support efficient serialization. The storage array
  * will be trimmed down to the smallest possible size before the object is
  * serialized.
- * 
+ *
  * @author Nathan Sprague
  * @version V1.1 12/6/16
- *
  */
 public class BitSequence implements Iterable<Integer>, Serializable {
 
@@ -132,7 +131,6 @@ public class BitSequence implements Iterable<Integer>, Serializable {
   }
 
 
-
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof BitSequence)) {
@@ -231,12 +229,12 @@ public class BitSequence implements Iterable<Integer>, Serializable {
   /**
    * This method overrides the default writeObject method to make sure that the
    * array is trimmed before serialization.
-   * 
+   *
    * @throws IOException If there is a problem writing to the provided output
-   *         stream.
+   *                     stream.
    */
   private void writeObject(java.io.ObjectOutputStream out)
-      throws IOException {
+    throws IOException {
     trim();
     out.defaultWriteObject();
   }

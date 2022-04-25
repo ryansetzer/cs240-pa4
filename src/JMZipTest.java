@@ -1,4 +1,5 @@
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,16 +11,16 @@ import java.io.PrintWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
  * JUnit tests for the CS240 Huffman Coding Project.
- * 
+ *
  * @author Nathan Sprague
  * @version 3/2019
- *
  */
 class JMZipTest {
 
@@ -30,15 +31,15 @@ class JMZipTest {
 
   // Keep a list of all the files that are created so that they can be deleted.
   private String[] createdFiles = {"empty.dat", "empty.jmz", "one_byte.dat", "one_byte.jmz",
-      "mary.txt", "mary.jmz", "fibonacci.dat", "fibonacci.jmz", "bytes.dat", "bytes.jmz",
-      "bytes_restored.dat", "flubber.jmz"};
+    "mary.txt", "mary.jmz", "fibonacci.dat", "fibonacci.jmz", "bytes.dat", "bytes.jmz",
+    "bytes_restored.dat", "flubber.jmz"};
 
 
   /**
    * Create several files that can be used to test encoding and decoding.
-   * 
+   * <p>
    * Reset System.out and System.err so they can be checked in tests.
-   * 
+   *
    * @throws IOException
    */
   @BeforeEach
@@ -120,25 +121,25 @@ class JMZipTest {
 
   @Test
   public void testZipHandlesZeroArguments() {
-    JMZip.main(new String[] {});
+    JMZip.main(new String[]{});
     assertProducesErrorMessage();
   }
 
   @Test
   public void testZipHandlesOneMissingArgument() {
-    JMZip.main(new String[] {"file.txt"});
+    JMZip.main(new String[]{"file.txt"});
     assertProducesErrorMessage();
   }
 
   @Test
   public void testZipHandlesUnreadableFile() {
-    JMZip.main(new String[] {"BLAfjdlSFl.txt", "bytes.jmz"});
+    JMZip.main(new String[]{"BLAfjdlSFl.txt", "bytes.jmz"});
     assertProducesErrorMessage();
   }
 
   @Test
   public void testZipHandlesUnwriteableFile() {
-    JMZip.main(new String[] {"mary.txt", "/bytes.jmz"});
+    JMZip.main(new String[]{"mary.txt", "/bytes.jmz"});
     assertProducesErrorMessage();
   }
 
@@ -148,25 +149,25 @@ class JMZipTest {
 
   @Test
   public void testUnzipHandlesZeroArguments() {
-    JMUnzip.main(new String[] {});
+    JMUnzip.main(new String[]{});
     assertProducesErrorMessage();
   }
 
   @Test
   public void testUnzipHandlesOneMissingArgument() {
-    JMUnzip.main(new String[] {"file.txt"});
+    JMUnzip.main(new String[]{"file.txt"});
     assertProducesErrorMessage();
   }
 
   @Test
   public void testUnzipHandlesUnreadableFile() {
-    JMUnzip.main(new String[] {"BLAfjdlSFl.txt", "out.jmz"});
+    JMUnzip.main(new String[]{"BLAfjdlSFl.txt", "out.jmz"});
     assertProducesErrorMessage();
   }
 
   @Test
   public void testUnzipHandlesWrongFileFormat() {
-    JMUnzip.main(new String[] {"mary.txt", "blah.txt"});
+    JMUnzip.main(new String[]{"mary.txt", "blah.txt"});
     assertProducesErrorMessage();
   }
 
@@ -176,7 +177,7 @@ class JMZipTest {
 
   @Test
   public void testJMZipCreatesFile() throws IOException {
-    JMZip.main(new String[] {"mary.txt", "flubber.jmz"});
+    JMZip.main(new String[]{"mary.txt", "flubber.jmz"});
 
     File file = new File("flubber.jmz");
     assertTrue(file.exists());
@@ -198,7 +199,7 @@ class JMZipTest {
 
   @Test
   public void testOneByteFileCorrectFrequencies() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"one_byte.dat", "one_byte.jmz"});
+    JMZip.main(new String[]{"one_byte.dat", "one_byte.jmz"});
 
     HuffmanSave result = loadSaved("one_byte.jmz");
     assertEquals(1, result.getFrequencies().size());
@@ -207,7 +208,7 @@ class JMZipTest {
 
   @Test
   public void testMultiByteFileCorrectFrequencies() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"bytes.dat", "bytes.jmz"});
+    JMZip.main(new String[]{"bytes.dat", "bytes.jmz"});
 
     HuffmanSave result = loadSaved("bytes.jmz");
     assertEquals(100, result.getFrequencies().size());
@@ -222,7 +223,7 @@ class JMZipTest {
 
   @Test
   public void testEmptyFileCorrectEncodingLength() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"empty.dat", "empty.jmz"});
+    JMZip.main(new String[]{"empty.dat", "empty.jmz"});
 
     HuffmanSave result = loadSaved("empty.jmz");
     assertEquals(0, result.getEncoding().length());
@@ -230,7 +231,7 @@ class JMZipTest {
 
   @Test
   public void testOneByteFileCorrectEncodingLength() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"one_byte.dat", "one_byte.jmz"});
+    JMZip.main(new String[]{"one_byte.dat", "one_byte.jmz"});
 
     HuffmanSave result = loadSaved("one_byte.jmz");
     assertEquals(1, result.getEncoding().length());
@@ -238,7 +239,7 @@ class JMZipTest {
 
   @Test
   public void testTextFileCorrectEncodingLength() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"mary.txt", "mary.jmz"});
+    JMZip.main(new String[]{"mary.txt", "mary.jmz"});
 
     HuffmanSave result = loadSaved("mary.jmz");
     assertEquals(227, result.getEncoding().length());
@@ -246,7 +247,7 @@ class JMZipTest {
 
   @Test
   public void testFibonacciFileCorrectEncodingLength() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"fibonacci.dat", "fibonacci.jmz"});
+    JMZip.main(new String[]{"fibonacci.dat", "fibonacci.jmz"});
 
     HuffmanSave result = loadSaved("fibonacci.jmz");
     assertEquals(7147, result.getEncoding().length());
@@ -254,7 +255,7 @@ class JMZipTest {
 
   @Test
   public void testByteFileCorrectEncodingLength() throws ClassNotFoundException, IOException {
-    JMZip.main(new String[] {"bytes.dat", "bytes.jmz"});
+    JMZip.main(new String[]{"bytes.dat", "bytes.jmz"});
 
     HuffmanSave result = loadSaved("bytes.jmz");
     assertEquals(38557, result.getEncoding().length());
@@ -265,8 +266,8 @@ class JMZipTest {
   // -----------------------------------------------
 
   private void checkReconstruction(String name) throws IOException {
-    JMZip.main(new String[] {name, "bytes.jmz"});
-    JMUnzip.main(new String[] {"bytes.jmz", "bytes_restored.dat"});
+    JMZip.main(new String[]{name, "bytes.jmz"});
+    JMUnzip.main(new String[]{"bytes.jmz", "bytes_restored.dat"});
     Path path1 = FileSystems.getDefault().getPath(name);
     Path path2 = FileSystems.getDefault().getPath("bytes_restored.dat");
     byte[] bytes1 = Files.readAllBytes(path1);
@@ -299,6 +300,5 @@ class JMZipTest {
     checkReconstruction("bytes.dat");
   }
 
-  
-  
+
 }
