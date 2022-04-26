@@ -178,7 +178,6 @@ class JMZipTest {
   @Test
   public void testJMZipCreatesFile() throws IOException {
     JMZip.main(new String[]{"mary.txt", "flubber.jmz"});
-
     File file = new File("flubber.jmz");
     assertTrue(file.exists());
   }
