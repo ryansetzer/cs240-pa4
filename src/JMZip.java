@@ -1,4 +1,7 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 /**
@@ -19,17 +22,22 @@ public class JMZip {
       File readFile = new File(args[0]);
       FileWriter writeFile = new FileWriter(args[1]);
       FileInputStream fis = new FileInputStream(readFile);
-      // Hash Map of Character Frequencies
       HashMap<Byte, Integer> frequencies = new HashMap<>();
-      // Temporary Character used for While Loop
-      int character;
-      // While characters still exist in file
-      while ((character = fis.read()) != -1) {
-        // Finds frequency of character in map
-        int frequency = frequencies.getOrDefault(character, 0);
-        // Increments character count
-        frequencies.put((byte) character, frequency + 1);
+      byte[] fileAsBytes = new byte[(int) readFile.length()];
+      fis.read(fileAsBytes);
+      fis.close();
+      // Temporary variable to store frequency of byte
+      int frequency;
+      // Iterating over all bytes to store in Frequencies
+      for (int i = 0; i < fileAsBytes.length; i++) {
+        // Gathering frequency of byte
+        frequency = frequencies.getOrDefault(fileAsBytes[i], 0);
+        // Incrementing frequency when found
+        frequencies.put(fileAsBytes[i], frequency + 1);
       }
+      HuffmanTree huffmantree = new HuffmanTree(frequencies);
+
+
 
     } catch (Exception e) { // If file fails to be opened or read
       e.printStackTrace();
