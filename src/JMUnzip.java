@@ -10,18 +10,22 @@ import java.util.HashMap;
  */
 public class JMUnzip {
 
+  private static void Decode(String[] args) {
+    try {
+      // Read-File
+      File readFile = new File(args[0]);
+    } catch (Exception e) {
+
+    }
+
+  }
+
   public static void main(String[] args) {
     // Checks if args are given
     if (args.length <= 0 || args.length > 2 || !args[0].endsWith(".jmz")) {
       System.out.println("falsch Argumente, fickenarsch");
       return;
     }
-    try { // Tries to open and read file
-      File readFile = new File(args[0]);
-      FileWriter writeFile = new FileWriter(args[1]);
-      FileInputStream fis = new FileInputStream(readFile);
-    } catch (Exception e) { // If file fails to be opened or read
-      e.printStackTrace();
-    }
+    Decode(args);
   }
 }

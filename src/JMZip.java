@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * JMZip Class for CS240 PA 4
@@ -12,16 +13,14 @@ import java.util.HashMap;
  */
 public class JMZip {
 
-  public static void main(String[] args) {
-    // Checks if args are given
-    if (args.length <= 0 || args.length > 2) {
-      System.out.println("falsch Argumente, fickenarsch");
-      return;
-    }
-    try { // Tries to open and read file
+  private static void Encode(String[] args) {
+    try { // Tries to open and read-file
+      // Read-File
       File readFile = new File(args[0]);
-      FileWriter writeFile = new FileWriter(args[1]);
       FileInputStream fis = new FileInputStream(readFile);
+      // Write-File
+      FileOutputStream writeFile = new FileOutputStream(args[1]);
+      ObjectOutputStream oos = new ObjectOutputStream(writeFile);
       HashMap<Byte, Integer> frequencies = new HashMap<>();
       byte[] fileAsBytes = new byte[(int) readFile.length()];
       fis.read(fileAsBytes);
@@ -36,12 +35,25 @@ public class JMZip {
         frequencies.put(fileAsBytes[i], frequency + 1);
       }
       HuffmanTree huffmantree = new HuffmanTree(frequencies);
-      huffmantree.findEncoding((byte) 33);
-
-
-
+      BitSequence bitsequence = new BitSequence();
+      for (Byte b : fileAsBytes) {
+        bitsequence.appendBits(huffmantree.findEncoding(b));
+      }
+      HuffmanSave huffmansave = new HuffmanSave(bitsequence, frequencies);
+      oos.writeObject(huffmansave);
+      writeFile.close();
+      oos.close();
     } catch (Exception e) { // If file fails to be opened or read
       e.printStackTrace();
     }
+  }
+
+  public static void main(String[] args) {
+    // Checks if args are given
+    if (args.length <= 0 || args.length > 2) {
+      System.out.println("falsch Argumente, fickenarsch");
+      return;
+    }
+    Encode(args);
   }
 }

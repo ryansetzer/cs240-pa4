@@ -80,7 +80,7 @@ public class HuffmanTree {
 
   private String findHelper(byte key, HuffmanNode node) {
     // Base Case is Leaf
-    if (node.isleaf()) {
+    if (node instanceof HuffmanLeafNode) {
       if (((HuffmanLeafNode) node).value() == key) {
         return "";
       } else {
@@ -88,20 +88,25 @@ public class HuffmanTree {
       }
     } else {
       HuffmanInternalNode tempNode = (HuffmanInternalNode) node;
-      if (tempNode.left() != null && findHelper(key, tempNode.left()).equals(
-        "")) {
-        return "0" + findHelper(key, tempNode.left());
-      } else if ((tempNode).right() != null && findHelper(key,
-        (tempNode).right()).equals("")) {
-        return "1" + findHelper(key, ((HuffmanInternalNode) node).left());
-      } else {
-        return "null";
+      if (tempNode.left() != null) {
+        if (!findHelper(key, tempNode.left()).equals(
+          "null")) {
+          return "0" + findHelper(key, tempNode.left());
+        }
       }
+      if (tempNode.right() != null) {
+        if (!findHelper(key,
+          tempNode.right()).equals("null")) {
+          return "1" + findHelper(key, tempNode.right());
+        }
+      }
+      return "null";
     }
   }
 
-  public int findEncoding(byte key) {
-    return Integer.valueOf(findHelper(key, root));
+
+  public String findEncoding(byte key) {
+    return findHelper(key, root);
   }
 
   /**
