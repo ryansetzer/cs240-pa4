@@ -36,6 +36,7 @@ public class JMZip {
         frequencies.put(fileAsBytes[i], frequency + 1);
       }
       HuffmanTree huffmantree = new HuffmanTree(frequencies);
+      huffmantree.findEncoding((byte) 33);
 
 
 

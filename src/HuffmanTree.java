@@ -32,11 +32,42 @@ public class HuffmanTree {
   }
 
   public HuffmanTree(HashMap<Byte, Integer> frequencies) {
+    buildFromFrequencies(frequencies);
+  }
+
+  private ArrayList<Byte> sortFrequencies(HashMap<Byte, Integer> frequencies) {
     // Creating ArrayLists of Values and Keys
     ArrayList<Byte> keys = new ArrayList<>(frequencies.keySet());
-    ArrayList<Integer> values = new ArrayList<>(frequencies.values());
-    Collections.sort(keys, Comparator.comparing(s -> values.get(s)));
-    System.out.print("Sorted");
+    // Sorting keys by value
+    keys.sort(Comparator.comparing(x -> frequencies.get(x)));
+    return keys;
+  }
+
+  private void buildFromFrequencies(HashMap<Byte, Integer> frequencies) {
+    // Creating ArrayLists of sorted Keys
+    ArrayList<Byte> keys = sortFrequencies(frequencies);
+    ArrayList<HuffmanNode> nodes = new ArrayList<>();
+    // Creating Leaf Nodes from Keys
+    for (Byte key : keys) {
+      nodes.add(new HuffmanLeafNode(key, frequencies.get(key)));
+    }
+    HuffmanInternalNode tempIntNode;
+    while (nodes.size() != 1) {
+      HuffmanNode leftNode = nodes.get(0);
+      HuffmanNode rightNode = nodes.get(1);
+      // Creating internal node from two "lightest" nodes
+      tempIntNode =
+        new HuffmanInternalNode(leftNode.weight() + rightNode.weight(),
+          leftNode, rightNode);
+      root = tempIntNode;
+      nodes.remove(0);
+      nodes.remove(0);
+      nodes.add(tempIntNode);
+      nodes.sort(Comparator.comparing(HuffmanNode::weight));
+    }
+    for (int i = 0; i < 1; i++) {
+      System.out.println();
+    }
   }
 
   public HuffmanNode root() {
@@ -45,6 +76,32 @@ public class HuffmanTree {
 
   public int weight() {
     return root.weight();
+  }
+
+  private String findHelper(byte key, HuffmanNode node) {
+    // Base Case is Leaf
+    if (node.isleaf()) {
+      if (((HuffmanLeafNode) node).value() == key) {
+        return "";
+      } else {
+        return "null";
+      }
+    } else {
+      HuffmanInternalNode tempNode = (HuffmanInternalNode) node;
+      if (tempNode.left() != null && findHelper(key, tempNode.left()).equals(
+        "")) {
+        return "0" + findHelper(key, tempNode.left());
+      } else if ((tempNode).right() != null && findHelper(key,
+        (tempNode).right()).equals("")) {
+        return "1" + findHelper(key, ((HuffmanInternalNode) node).left());
+      } else {
+        return "null";
+      }
+    }
+  }
+
+  public int findEncoding(byte key) {
+    return Integer.valueOf(findHelper(key, root));
   }
 
   /**
