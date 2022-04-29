@@ -52,6 +52,10 @@ public class HuffmanTree {
       nodes.add(new HuffmanLeafNode(key, frequencies.get(key)));
     }
     HuffmanInternalNode tempIntNode;
+    // Zero Byte Files
+    if (nodes.size() == 0) {
+      return;
+    }
 
     // One Byte Files
     if (nodes.size() == 1) {
