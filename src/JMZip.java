@@ -19,8 +19,10 @@ public class JMZip {
       File readFile = new File(args[0]);
       FileInputStream fis = new FileInputStream(readFile);
       // Write-File
-      FileOutputStream writeFile = new FileOutputStream(args[1]);
-      ObjectOutputStream oos = new ObjectOutputStream(writeFile);
+      File writeFile = new File(args[1]);
+      writeFile.createNewFile();
+      FileOutputStream fos = new FileOutputStream(args[1]);
+      ObjectOutputStream oos = new ObjectOutputStream(fos);
       HashMap<Byte, Integer> frequencies = new HashMap<>();
       byte[] fileAsBytes = new byte[(int) readFile.length()];
       fis.read(fileAsBytes);
@@ -41,7 +43,7 @@ public class JMZip {
       }
       HuffmanSave huffmansave = new HuffmanSave(bitsequence, frequencies);
       oos.writeObject(huffmansave);
-      writeFile.close();
+      fos.close();
       oos.close();
     } catch (Exception e) { // If file fails to be opened or read
       e.printStackTrace();

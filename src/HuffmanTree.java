@@ -52,6 +52,16 @@ public class HuffmanTree {
       nodes.add(new HuffmanLeafNode(key, frequencies.get(key)));
     }
     HuffmanInternalNode tempIntNode;
+
+    // One Byte Files
+    if (nodes.size() == 1) {
+      HuffmanLeafNode oneByteLeaf = (HuffmanLeafNode) nodes.get(0);
+      tempIntNode = new HuffmanInternalNode(oneByteLeaf.weight(), oneByteLeaf
+        , null);
+      root = tempIntNode;
+      return;
+    }
+
     while (nodes.size() != 1) {
       HuffmanNode leftNode = nodes.get(0);
       HuffmanNode rightNode = nodes.get(1);
@@ -64,9 +74,6 @@ public class HuffmanTree {
       nodes.remove(0);
       nodes.add(tempIntNode);
       nodes.sort(Comparator.comparing(HuffmanNode::weight));
-    }
-    for (int i = 0; i < 1; i++) {
-      System.out.println();
     }
   }
 

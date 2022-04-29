@@ -17,7 +17,9 @@ public class JMUnzip {
       HuffmanSave huffmansave = (HuffmanSave) ois.readObject();
       ois.close();
       // Write-File
-      FileOutputStream writeFile = new FileOutputStream(args[1]);
+      File writeFile = new File(args[1]);
+      writeFile.createNewFile();
+      FileOutputStream fos = new FileOutputStream(writeFile);
 
 
       // Getting Objects from HuffmanSave
@@ -41,7 +43,7 @@ public class JMUnzip {
               i));
             String blah = encodings[j];
             String substring = sequenceString.substring(0, i);
-            writeFile.write(encodingsWithKeys.get(sequenceString.substring(0,
+            fos.write(encodingsWithKeys.get(sequenceString.substring(0,
               i)));
             sequenceString = sequenceString.substring(i);
             i = 0;
@@ -50,7 +52,7 @@ public class JMUnzip {
         }
       }
       // Add end of file
-      writeFile.close();
+      fos.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
