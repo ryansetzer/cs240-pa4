@@ -233,8 +233,7 @@ public class BitSequence implements Iterable<Integer>, Serializable {
    * @throws IOException If there is a problem writing to the provided output
    *                     stream.
    */
-  private void writeObject(java.io.ObjectOutputStream out)
-    throws IOException {
+  private void writeObject(java.io.ObjectOutputStream out) throws IOException {
     trim();
     out.defaultWriteObject();
   }

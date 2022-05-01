@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * Huffman Tree Class for CS240 PA-4.
@@ -9,27 +11,6 @@ import java.util.*;
 public class HuffmanTree {
 
   private HuffmanNode root;
-
-  /**
-   * Huffman Tree Leaf Node Constructor.
-   *
-   * @param element - element for Leaf Node.
-   * @param weight  - weight for Leaf Node.
-   */
-  public HuffmanTree(byte element, int weight) {
-    this.root = new HuffmanLeafNode(element, weight);
-  }
-
-  /**
-   * Huffman Tree Internal Node Constructor.
-   *
-   * @param weight - weight for Internal Node.
-   * @param left   - left Node of root.
-   * @param right  - right Node of root.
-   */
-  public HuffmanTree(int weight, HuffmanNode left, HuffmanNode right) {
-    this.root = new HuffmanInternalNode(weight, left, right);
-  }
 
   public HuffmanTree(HashMap<Byte, Integer> frequencies) {
     buildFromFrequencies(frequencies);
@@ -52,6 +33,7 @@ public class HuffmanTree {
       nodes.add(new HuffmanLeafNode(key, frequencies.get(key)));
     }
     HuffmanInternalNode tempIntNode;
+
     // Zero Byte Files
     if (nodes.size() == 0) {
       return;
@@ -60,8 +42,7 @@ public class HuffmanTree {
     // One Byte Files
     if (nodes.size() == 1) {
       HuffmanLeafNode oneByteLeaf = (HuffmanLeafNode) nodes.get(0);
-      tempIntNode = new HuffmanInternalNode(oneByteLeaf.weight(), oneByteLeaf
-        , null);
+      tempIntNode = new HuffmanInternalNode(oneByteLeaf.weight(), oneByteLeaf, null);
       root = tempIntNode;
       return;
     }
@@ -70,9 +51,8 @@ public class HuffmanTree {
       HuffmanNode leftNode = nodes.get(0);
       HuffmanNode rightNode = nodes.get(1);
       // Creating internal node from two "lightest" nodes
-      tempIntNode =
-        new HuffmanInternalNode(leftNode.weight() + rightNode.weight(),
-          leftNode, rightNode);
+      tempIntNode = new HuffmanInternalNode(leftNode.weight()
+        + rightNode.weight(), leftNode, rightNode);
       root = tempIntNode;
       nodes.remove(0);
       nodes.remove(0);
@@ -85,10 +65,6 @@ public class HuffmanTree {
     return root();
   }
 
-  public int weight() {
-    return root.weight();
-  }
-
   private String findHelper(byte key, HuffmanNode node) {
     // Base Case is Leaf
     if (node instanceof HuffmanLeafNode) {
@@ -99,42 +75,18 @@ public class HuffmanTree {
       }
     } else {
       HuffmanInternalNode tempNode = (HuffmanInternalNode) node;
-      if (tempNode.left() != null) {
-        if (!findHelper(key, tempNode.left()).equals(
-          "null")) {
-          return "0" + findHelper(key, tempNode.left());
-        }
+      if (tempNode.left() != null && !findHelper(key, tempNode.left()).equals("null")) {
+        return "0" + findHelper(key, tempNode.left());
       }
-      if (tempNode.right() != null) {
-        if (!findHelper(key,
-          tempNode.right()).equals("null")) {
-          return "1" + findHelper(key, tempNode.right());
-        }
+      if (tempNode.right() != null && !findHelper(key, tempNode.right()).equals("null")) {
+        return "1" + findHelper(key, tempNode.right());
       }
       return "null";
     }
   }
 
-
   public String findEncoding(byte key) {
     return findHelper(key, root);
-  }
-
-  /**
-   * Comparing two Huffman Trees.
-   *
-   * @param obj - Object comparing with Tree.
-   * @return - (-1) less (0) equals (1) greater.
-   */
-  public int compareTo(Object obj) {
-    HuffmanTree that = (HuffmanTree) obj;
-    if (root.weight() < that.weight()) {
-      return -1;
-    } else if (root.weight() == that.weight()) {
-      return 0;
-    } else {
-      return 1;
-    }
   }
 }
 
